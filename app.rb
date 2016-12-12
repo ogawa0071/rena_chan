@@ -23,7 +23,7 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        event.message['text'] =~ ね$ do
+        if event.message['text'] =~ /ね$/
           message = {
             type: 'text',
             text: 'それな'
