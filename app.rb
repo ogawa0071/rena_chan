@@ -25,7 +25,7 @@ post '/callback' do
       when Line::Bot::Event::MessageType::Text
         message = {
           type: 'text',
-          text: event.message['ABC']
+          text: 'ABC'
         }
         client.reply_message(event['replyToken'], message)
       end
