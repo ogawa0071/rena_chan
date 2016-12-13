@@ -30,6 +30,12 @@ post '/callback' do
           }
           client.reply_message(event['replyToken'], message)
         end
+        if event.message['text'] === それな
+          message = {
+            type: 'text',
+            text: 'いまのそれな言いたかったー！'
+          }
+          client.reply_message(event['replyToken'], message)
       end
     end
   }
