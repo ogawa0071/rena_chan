@@ -33,14 +33,14 @@ post '/callback' do
         if event.message['text'] =~ /な$/
           message = {
             type: 'text',
-            text: 'いまのそれな言いたかったー！'
+            text: 'それな'
           }
           client.reply_message(event['replyToken'], message)
         end
         if event.message['text'] =~ /ね？$/
           message = {
             type: 'text',
-            text: 'いまのそれな言いたかったー！'
+            text: 'それな'
           }
           client.reply_message(event['replyToken'], message)
         end
