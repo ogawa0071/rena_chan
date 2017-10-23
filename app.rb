@@ -23,15 +23,15 @@ post '/callback' do
       case event.type
       when Line::Bot::Event::MessageType::Text
         case event.message['text']
-        when /ね$|な$|ね？$/
-          message = {
-            type: 'text',
-            text: 'それな'
-          }
-        when /^それな$/
+        when 'それな'
           message = {
             type: 'text',
             text: 'いまのそれな言いたかったー！'
+          }
+        when /ね\Z|な\Z|ね？\Z/
+          message = {
+            type: 'text',
+            text: 'それな'
           }
         end
 
