@@ -23,7 +23,7 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        case event.message['text']
+        case event.message.text
         when 'それな'
           message = {
             type: 'text',
@@ -35,10 +35,18 @@ post '/callback' do
             text: 'それな'
           }
         end
-
-        if message
-          client.reply_message(event['replyToken'], message)
+      when Line::Bot::Event::MessageType::Sticker
+        case event.message.packageId
+        when '1002897'
+          message = {
+            type: 'text',
+            text: 'ありさだー！'
+          }
         end
+      end
+
+      if message
+        client.reply_message(event['replyToken'], message)
       end
     end
   }
