@@ -36,7 +36,7 @@ post '/callback' do
           }
         end
       when Line::Bot::Event::MessageType::Sticker
-        case event.message.packageId
+        case event.message['packageId']
         when '1002897'
           message = {
             type: 'text',
