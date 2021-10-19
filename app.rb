@@ -19,7 +19,7 @@ post '/callback' do
 
   events = client.parse_events_from(body)
 
-  events.each { |event|
+  events.each do |event|
     case event
     when Line::Bot::Event::Message
       case event.type
@@ -50,7 +50,7 @@ post '/callback' do
         client.reply_message(event['replyToken'], message)
       end
     end
-  }
+  end
 
   "OK"
 end
