@@ -30,7 +30,7 @@ post '/callback' do
             type: 'text',
             text: 'いまのそれな言いたかったー！'
           }
-        when /ね\Z|な\Z|ね？\Z/
+        when /ね$|な$|ね？$/
           message = {
             type: 'text',
             text: 'それな'
