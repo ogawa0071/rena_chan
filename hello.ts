@@ -5,7 +5,7 @@ import {
   Client,
   WebhookEvent,
   MessageAPIResponseBase,
-} from "npm:@line/bot-sdk";
+} from "npm:@line/bot-sdk@7.5.2";
 
 // Setup all LINE client and Express configurations.
 const clientConfig: ClientConfig = {
