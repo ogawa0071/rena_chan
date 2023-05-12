@@ -69,6 +69,8 @@ app.get("/", (c) =>
 app.post("/webhook", async (c) => {
   const events: WebhookEvent[] = (await c.req.json()).events;
 
+  console.log(events);
+
   // Process all of the received events asynchronously.
   const results = await Promise.all(
     events.map(async (event: WebhookEvent) => {
