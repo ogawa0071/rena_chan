@@ -1,5 +1,4 @@
-import { Hono } from "https://deno.land/x/hono@v3.1.8/mod.ts";
-import { serve } from "https://deno.land/std@0.167.0/http/server.ts";
+import { Hono } from "https://deno.land/x/hono@v3.3.1/mod.ts";
 import {
   ClientConfig,
   Client,
@@ -27,16 +26,16 @@ const textEventHandler = async (
     case "message":
       switch (event.message.type) {
         case "text":
-          switch (event.message.text) {
-            case "それな":
+          switch (true) {
+            case event.message.text === "それな":
               return await client.replyMessage(event.replyToken, {
                 type: "text",
                 text: "いまのそれな言いたかったー！",
               });
 
-            case event.message.text.endsWith("ね") ||
-              event.message.text.endsWith("な") ||
-              (event.message.text.endsWith("ね？") && event.message.text):
+            case event.message.text.endsWith("ね"):
+            case event.message.text.endsWith("な"):
+            case event.message.text.endsWith("ね？"):
               return await client.replyMessage(event.replyToken, {
                 type: "text",
                 text: "それな",
@@ -99,4 +98,4 @@ app.post("/webhook", async (c) => {
   });
 });
 
-serve(app.fetch);
+Deno.serve(app.fetch);
