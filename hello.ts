@@ -1,10 +1,10 @@
-import { Hono } from "https://deno.land/x/hono@v3.3.1/mod.ts";
+import { Hono } from "https://deno.land/x/hono@v3.5.8/mod.ts";
 import {
-  ClientConfig,
   Client,
-  WebhookEvent,
+  ClientConfig,
   MessageAPIResponseBase,
-} from "https://esm.sh/@line/bot-sdk@7.5.2";
+  WebhookEvent,
+} from "npm:@line/bot-sdk@7.5.2";
 
 // Setup all LINE client and Express configurations.
 const clientConfig: ClientConfig = {
@@ -20,7 +20,7 @@ const app = new Hono();
 
 // Function handler to receive the text.
 const textEventHandler = async (
-  event: WebhookEvent
+  event: WebhookEvent,
 ): Promise<MessageAPIResponseBase | undefined> => {
   switch (event.type) {
     case "message":
@@ -61,8 +61,7 @@ app.get("/", (c) =>
   c.json({
     status: "success",
     message: "Connected successfully!",
-  })
-);
+  }));
 
 // This route is used for the Webhook.
 app.post("/webhook", async (c) => {
@@ -85,10 +84,10 @@ app.post("/webhook", async (c) => {
           {
             status: "error",
           },
-          500
+          500,
         );
       }
-    })
+    }),
   );
 
   // Return a successfull message.
