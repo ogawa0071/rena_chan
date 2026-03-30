@@ -1,10 +1,10 @@
-import { Hono } from "https://deno.land/x/hono@v3.5.8/mod.ts";
+import { Hono } from "hono";
 import {
   Client,
   ClientConfig,
   MessageAPIResponseBase,
   WebhookEvent,
-} from "npm:@line/bot-sdk@7.5.2";
+} from "@line/bot-sdk";
 
 // Setup all LINE client and Express configurations.
 const clientConfig: ClientConfig = {
@@ -61,7 +61,8 @@ app.get("/", (c) =>
   c.json({
     status: "success",
     message: "Connected successfully!",
-  }));
+  }),
+);
 
 // This route is used for the Webhook.
 app.post("/webhook", async (c) => {

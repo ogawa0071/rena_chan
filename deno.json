@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "dev": "deno run --watch --env-file --allow-env --allow-net main.ts"
+  },
+  "imports": {
+    "hono": "npm:hono@3.5.8",
+    "@line/bot-sdk": "npm:@line/bot-sdk@7.5.2"
+  }
+}
