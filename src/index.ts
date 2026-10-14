@@ -1,10 +1,12 @@
 import { Hono } from "hono";
-import { Client, ClientConfig, MessageAPIResponseBase, WebhookEvent } from "@line/bot-sdk";
+import { Client } from "@line/bot-sdk";
+import type { ClientConfig, MessageAPIResponseBase, WebhookEvent } from "@line/bot-sdk";
+import { env } from "cloudflare:workers";
 
 // Setup all LINE client and Express configurations.
 const clientConfig: ClientConfig = {
-  channelAccessToken: Deno.env.get("CHANNEL_ACCESS_TOKEN") || "",
-  channelSecret: Deno.env.get("CHANNEL_SECRET") || "",
+  channelAccessToken: env.CHANNEL_ACCESS_TOKEN,
+  channelSecret: env.CHANNEL_SECRET,
 };
 
 // Create a new LINE SDK client.
@@ -93,4 +95,4 @@ app.post("/webhook", async (c) => {
   });
 });
 
-Deno.serve(app.fetch);
+export default app;

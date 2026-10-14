@@ -9,8 +9,8 @@
     "typecheck": "cf workers types && tsc"
   },
   "dependencies": {
-    "@line/bot-sdk": "10.6.0",
-    "hono": "4.12.9"
+    "@line/bot-sdk": "11.3.0",
+    "hono": "4.13.13"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "beta",
