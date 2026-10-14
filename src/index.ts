@@ -1,56 +1,84 @@
-import { Hono } from "hono";
-import { Client } from "@line/bot-sdk";
-import type { ClientConfig, MessageAPIResponseBase, WebhookEvent } from "@line/bot-sdk";
 import { env } from "cloudflare:workers";
+import { Hono } from "hono";
+import * as line from "@line/bot-sdk";
 
 // Setup all LINE client and Express configurations.
-const clientConfig: ClientConfig = {
+const clientConfig: line.LineBotClientChannelAccessTokenConfig = {
   channelAccessToken: env.CHANNEL_ACCESS_TOKEN,
+};
+
+const middlewareConfig: line.MiddlewareConfig = {
   channelSecret: env.CHANNEL_SECRET,
 };
 
 // Create a new LINE SDK client.
-const client = new Client(clientConfig);
+const client = line.LineBotClient.fromChannelAccessToken(clientConfig);
 
 // Create a new Express application.
 const app = new Hono();
 
 // Function handler to receive the text.
 const textEventHandler = async (
-  event: WebhookEvent,
-): Promise<MessageAPIResponseBase | undefined> => {
+  event: line.webhook.Event,
+): Promise<line.MessageAPIResponseBase | undefined> => {
   switch (event.type) {
     case "message":
+      if (!event.replyToken) {
+        return;
+      }
+
       switch (event.message.type) {
         case "text":
           switch (true) {
             case event.message.text === "それな":
-              return await client.replyMessage(event.replyToken, {
-                type: "text",
-                text: "いまのそれな言いたかったー！",
+              await client.replyMessage({
+                replyToken: event.replyToken,
+                messages: [
+                  {
+                    type: "text",
+                    text: "いまのそれな言いたかったー！",
+                  },
+                ],
               });
+              return;
 
             case event.message.text.endsWith("ね"):
             case event.message.text.endsWith("な"):
             case event.message.text.endsWith("ね？"):
-              return await client.replyMessage(event.replyToken, {
-                type: "text",
-                text: "それな",
+              await client.replyMessage({
+                replyToken: event.replyToken,
+                messages: [
+                  {
+                    type: "text",
+                    text: "それな",
+                  },
+                ],
               });
+              return;
           }
           break;
 
         case "sticker":
           switch (event.message.packageId) {
             case "1002897":
-              return await client.replyMessage(event.replyToken, {
-                type: "text",
-                text: "ありさだー！",
+              await client.replyMessage({
+                replyToken: event.replyToken,
+                messages: [
+                  {
+                    type: "text",
+                    text: "ありさだー！",
+                  },
+                ],
               });
+              return;
           }
       }
   }
 };
+
+// Register the LINE middleware.
+// As an alternative, you could also pass the middleware in the route handler, which is what is used here.
+// app.use(middleware(middlewareConfig));
 
 // Route handler to receive webhook events.
 // This route is used to receive connection tests.
@@ -62,18 +90,23 @@ app.get("/", (c) =>
 );
 
 // This route is used for the Webhook.
-app.post("/webhook", async (c) => {
-  const events: WebhookEvent[] = (await c.req.json()).events;
+app.post("/callback", async (c) => {
+  const callbackRequest: line.webhook.CallbackRequest = await c.req.json();
+  const events: line.webhook.Event[] = callbackRequest.events;
 
   console.log(events);
 
-  // Process all of the received events asynchronously.
+  // Process all the received events asynchronously.
   const results = await Promise.all(
-    events.map(async (event: WebhookEvent) => {
+    events.map(async (event: line.webhook.Event) => {
       try {
         await textEventHandler(event);
       } catch (err: unknown) {
-        if (err instanceof Error) {
+        if (err instanceof line.HTTPFetchError) {
+          console.error(err.status);
+          console.error(err.headers.get("x-line-request-id"));
+          console.error(err.body);
+        } else if (err instanceof Error) {
           console.error(err);
         }
 
