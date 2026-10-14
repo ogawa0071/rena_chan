@@ -10,5 +10,10 @@ export default defineConfig({
       CHANNEL_ACCESS_TOKEN: bindings.secret(),
       CHANNEL_SECRET: bindings.secret(),
     },
+    observability: {
+      enabled: true,
+    },
+    workersDev: true,
+    previewUrls: true,
   },
 });
