@@ -1,10 +1,5 @@
 import { Hono } from "hono";
-import {
-  Client,
-  ClientConfig,
-  MessageAPIResponseBase,
-  WebhookEvent,
-} from "@line/bot-sdk";
+import { Client, ClientConfig, MessageAPIResponseBase, WebhookEvent } from "@line/bot-sdk";
 
 // Setup all LINE client and Express configurations.
 const clientConfig: ClientConfig = {
